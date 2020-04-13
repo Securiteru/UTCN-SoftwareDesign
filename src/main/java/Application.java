@@ -1,36 +1,45 @@
-import presentation_layer.LoginWindow;
 import data_source_logic_layer.DBConnection;
+import domain_logic_layer.Account;
+import presentation_layer.AdminLogin;
+import presentation_layer.LoginScreen;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+
+import static business_layer.AccountOperations.getAllAccounts;
+import static business_layer.AccountOperations.transferMoneyBetweenAccounts;
 
 
 public class Application {
 	public static Scanner scanner;
 
+
 	public static void main(String[] args) {
-		DBConnection conexiune = DBConnection.getConnection();
+//		DBConnection conexiune = DBConnection.getConnection();
+//		Account acc1=new Account();
+//		Account acc2=new Account();
+//		getAllAccounts();
+//		boolean t= transferMoneyBetweenAccounts(acc1, acc2, 15);
+//
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 
-		scanner = new Scanner(System.in);
-		System.out.println(
-				"*****Meniu selectie operatie*****\n" +
-						"*1.LOGIN* \n" +
-						"*2.EXIT* \n" +
-						"*********************************\n"
-		);
-		int opcode=scanner.nextInt();
-		switch(opcode){
-			case 1:
-				printy("You have chosen login");
-				LoginWindow Login=new LoginWindow();
-				Login.receiveLogin(scanner);
-				break;
-			case 2:
-				printy("Please come again! Thank You!\n*********************************\n");
-				System.exit(0);;
-				break;
-
+		AdminLogin login=new AdminLogin();
+		login.setLocationRelativeTo(null);
+		try {
+			TimeUnit.SECONDS.sleep(2);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
+
+
+
 	public static void printy(String message){
 		System.out.println(message);
 	}

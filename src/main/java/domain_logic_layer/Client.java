@@ -76,6 +76,7 @@ public class Client {
 	public Client(int client_id) {
 		this.client_id = client_id;
 	}
+	public Client(){}
 /***************************************************************
 	 * Domain Logic Methods
 	 ***************************************************************/

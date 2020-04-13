@@ -96,6 +96,7 @@ public class Account {
 	public Account(int account_id) {
 		this.account_id = account_id;
 	}
+	public Account(){}
 
 	/***************************************************************
 	 * Domain Logic Methods

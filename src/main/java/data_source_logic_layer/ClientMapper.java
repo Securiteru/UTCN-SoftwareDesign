@@ -1,5 +1,6 @@
 package data_source_logic_layer;
 
+import data_source_logic_layer.exceptions.DataMapperException;
 import domain_logic_layer.Client;
 import domain_logic_layer.Login;
 
@@ -7,11 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ClientMapper {
-	public static DBConnection conexiune;
-
+public class ClientMapper extends DataMapper{
 		/*
 		CREATE TABLE client_table (
 		client_id INT(6) UNSIGNED AUTO_INCREMENT,
@@ -25,10 +25,11 @@ public class ClientMapper {
 	 */
 
 	public ClientMapper(DBConnection conexiune) {
-		conexiune = DBConnection.getConnection();
+		super(conexiune);
+		System.out.println(conexiune);
 	}
 
-		public static synchronized Client findByClientId(int client_id) throws DataMapperException {
+		public synchronized Client findByClientId(int client_id) throws DataMapperException {
 			try {
 				Connection db = conexiune.connection;
 				String statement = "SELECT `full_name`, `address`, `CNP`, `login_id` FROM `client_table` where `client_id`=?";
@@ -92,5 +93,30 @@ public class ClientMapper {
 				throw new DataMapperException("Error occured reading Students from the data source.", e);
 			}
 		}
+
+	public synchronized List<Client> getAllClients() throws DataMapperException {
+		List<Client> clientList=new ArrayList<Client>();
+		try {
+			Connection db = conexiune.connection;
+			String statement = "SELECT `full_name`, `address`, `CNP`, `login_id` FROM `client_table`";
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			ResultSet rs = dbStatement.executeQuery();
+			while(rs.next()) {
+				String full_name = rs.getString("full_name");
+				String address = rs.getString("address");
+				String CNP = rs.getString("CNP");
+				int login_id = rs.getInt("login_id");
+				Client client = new Client(login_id);
+				client.setFull_name(full_name);
+				client.setAddress(address);
+				client.setCNP(CNP);
+				client.setLogin_id(login_id);
+				clientList.add(client);
+			}
+		} catch (SQLException e) {
+			throw new DataMapperException("Error occured reading Students from the data source.", e);
+		}
+		return clientList;
+	}
 
 }

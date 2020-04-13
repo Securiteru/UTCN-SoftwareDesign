@@ -2,6 +2,8 @@ package domain_logic_layer;
 
 public class Login {
 
+	public Login(){}
+
 	public Login(int login_id) {
 		this.login_id = login_id;
 	}
