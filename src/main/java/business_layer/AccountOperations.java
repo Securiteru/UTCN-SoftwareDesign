@@ -14,35 +14,26 @@ import domain_logic_layer.Login;
 import java.util.List;
 
 public class AccountOperations {
-	public static boolean transferMoneyBetweenAccounts(Account to, Account from, float sum){
+	public static String transferMoneyBetweenAccounts(Account to, Account from, float sum){
 		try {
 			DBConnection conexiune = DBConnection.getConnection();
 			AccountMapper accy=new AccountMapper(conexiune);
-			Account to2=new Account();
-			Account from2=new Account();
-			to=accy.findByAccountId(to.getAccount_id());
-			System.out.println("FOUND ACCOUNT WITH ID: "+to.getAccount_id());
 			from=accy.findByAccountId(from.getAccount_id());
-			System.out.println(to.toString());
-			System.out.println(from.toString());
+			to=accy.findByAccountId(to.getAccount_id());
+			System.out.println("SENDING MONEY FROM ACCOUNT ID: "+to.getAccount_id()+" TO: ");
 			if(to.getAccount_status() != 1 || from.getAccount_status() != 1){
 				throw new AccountDisactivatedException();
 			}
-			if (to.getAmount() < sum) {
+			if (from.getAmount() < sum) {
 				throw new AmountMissMatchException();
 			}
 			accy.transferBetweenAccounts(to, from, sum);
-			to2=accy.findByAccountId(to.getAccount_id());
-			from2=accy.findByAccountId(from.getAccount_id());
-			System.out.println(to2.toString());
-			System.out.println(from2.toString());
-		} catch (DataMapperException e) {
+			return "Operation Successful! Transfered " + sum + " to account: " + to.getAccount_id() + " from account: " + from.getAccount_id();
+		} catch (DataMapperException | BusinessLogicException e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
-		}catch (BusinessLogicException e2){
-			System.out.println(e2.getMessage());
+			return e.getMessage();
 		}
-
-		return true;
 	}
 
 	public static void getAllAccounts(){

@@ -116,6 +116,7 @@ public class AccountMapper extends DataMapper{
 		}
 	}
 	public synchronized List<Account> getAllAccounts(Client client) throws DataMapperException {
+		System.out.println("GET ALL ACOUNTS WITH ID: "+client.getClient_id());
 		List<Account> accountList=new ArrayList<Account>();
 		try {
 			Connection db = this.conexiune.connection;
@@ -149,6 +150,7 @@ public class AccountMapper extends DataMapper{
 	}
 
 	private Account getAccount(ResultSet rs) throws SQLException {
+
 		int account_id = rs.getInt("account_id");
 		int client_id = rs.getInt("client_id");
 		String account_type = rs.getString("account_type");
@@ -161,6 +163,7 @@ public class AccountMapper extends DataMapper{
 		account.setAmount(amount);
 		account.setCurrency_code(currency_code);
 		account.setAccount_status(account_status);
+		System.out.println("ADDING ACCOUNT ID: "+account_id);
 		return account;
 	}
 }

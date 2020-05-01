@@ -29,19 +29,20 @@ public class ClientMapper extends DataMapper{
 		System.out.println(conexiune);
 	}
 
-		public synchronized Client findByClientId(int client_id) throws DataMapperException {
+		public synchronized Client findByClientId(int client_id_to_search) throws DataMapperException {
 			try {
 				Connection db = conexiune.connection;
 				String statement = "SELECT `full_name`, `address`, `CNP`, `login_id` FROM `client_table` where `client_id`=?";
 				PreparedStatement dbStatement = db.prepareStatement(statement);
-				dbStatement.setInt(1, client_id);
+				dbStatement.setInt(1, client_id_to_search);
 				ResultSet rs = dbStatement.executeQuery();
 				while(rs.next()) {
 					String full_name = rs.getString("full_name");
 					String address = rs.getString("address");
 					String CNP = rs.getString("CNP");
 					int login_id = rs.getInt("login_id");
-					Client client = new Client(login_id);
+					int client_id=rs.getInt("client_id");
+					Client client = new Client(client_id);
 					client.setFull_name(full_name);
 					client.setAddress(address);
 					client.setCNP(CNP);
@@ -53,6 +54,32 @@ public class ClientMapper extends DataMapper{
 				throw new DataMapperException("Error occured reading Students from the data source.", e);
 			}
 		}
+
+	public synchronized Client findClientByLoginId(int login_id_to_search) throws DataMapperException {
+		try {
+			Connection db = conexiune.connection;
+			String statement = "SELECT  `login_id`,`client_id`,`full_name`, `address`, `CNP`, `login_id` FROM `client_table` where `login_id`=?";
+			PreparedStatement dbStatement = db.prepareStatement(statement);
+			dbStatement.setInt(1, login_id_to_search);
+			ResultSet rs = dbStatement.executeQuery();
+			while(rs.next()) {
+				String full_name = rs.getString("full_name");
+				String address = rs.getString("address");
+				String CNP = rs.getString("CNP");
+				int login_id = rs.getInt("login_id");
+				int client_id=rs.getInt("client_id");
+				Client client = new Client(client_id);
+				client.setFull_name(full_name);
+				client.setAddress(address);
+				client.setCNP(CNP);
+				client.setLogin_id(login_id);
+				return client;
+			}
+			return null;
+		} catch (SQLException e) {
+			throw new DataMapperException("Error occured reading Students from the data source.", e);
+		}
+	}
 		public synchronized void update(Client client) throws DataMapperException {
 			try {
 				Connection db = conexiune.connection;
