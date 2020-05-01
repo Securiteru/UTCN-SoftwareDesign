@@ -9,10 +9,6 @@ import java.awt.*;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-import static business_layer.AccountOperations.getAllAccounts;
-import static business_layer.AccountOperations.transferMoneyBetweenAccounts;
-
-
 public class Application {
 	public static Scanner scanner;
 
@@ -23,7 +19,7 @@ public class Application {
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-		LoginScreen login=new LoginScreen();
+		AdminLogin login=new AdminLogin();
 		login.setVisible(true);
 	}
 

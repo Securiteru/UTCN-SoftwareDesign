@@ -1,10 +1,8 @@
 package data_source_logic_layer;
 
-import business_layer.business_exceptions.AmountMissMatchException;
 import data_source_logic_layer.exceptions.DataMapperException;
 import domain_logic_layer.Account;
 import domain_logic_layer.Client;
-import domain_logic_layer.Login;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

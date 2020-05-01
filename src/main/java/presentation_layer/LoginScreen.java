@@ -24,7 +24,7 @@ public class LoginScreen extends JFrame {
 		add(panel1);
 		centerScreen();
 		setTitle("Login Screen");
-		setSize(400,500);
+		setSize(600,500);
 
 		loginButton.addActionListener(e -> {
 			loginAction();
@@ -41,7 +41,6 @@ public class LoginScreen extends JFrame {
 	}
 
 	private void createUIComponents() {
-		// TODO: place custom component creation code here
 	}
 
 	public void loginAction(){
@@ -50,7 +49,7 @@ public class LoginScreen extends JFrame {
 		}else {
 			Login correctLogin = LoginAccountManagement.getLoginByRole(userName.getText(), new String(password.getPassword()), Admin.isSelected() ? "admin" : "user");
 			String outputString = "Password is: '" + new String(password.getPassword()) + "' username is: '" + userName.getText()
-					+ "' admin? '" + Admin.isSelected() + "' user ? '" + User.isSelected() + "' STATUS IS: " + correctLogin;
+					+ "' admin? '" + Admin.isSelected() + "' user ? '" + User.isSelected() + "' status is: " + correctLogin;
 			System.out.println(outputString);
 			if (correctLogin.getLogin_id() != 0) {
 				outputString = "Login details correct, redirecting towards the " + (Admin.isSelected() ? "admin" : "user") + " menu.";

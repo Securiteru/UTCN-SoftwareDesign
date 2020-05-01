@@ -41,7 +41,7 @@ public class LoginAccountManagement {
 		return mappy.getLoginByRole(user, password, role);
 	}
 
-	static public List<Client> getAllClients(){
+	static public List<Client> getAllClientsForAll(){
 		DBConnection conexiune = DBConnection.getConnection();
 		ClientMapper mappy=new ClientMapper(conexiune);
 		try {
@@ -52,7 +52,7 @@ public class LoginAccountManagement {
 		return null;
 	}
 
-	static public List<Account> getAllAccount(){
+	static public List<Account> getAllAccountsForAll(){
 		DBConnection conexiune = DBConnection.getConnection();
 		AccountMapper mappy=new AccountMapper(conexiune);
 		try {

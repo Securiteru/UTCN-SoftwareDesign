@@ -1,10 +1,6 @@
 package presentation_layer;
 
 import business_layer.LoginAccountManagement;
-import data_source_logic_layer.AccountMapper;
-import data_source_logic_layer.ClientMapper;
-import data_source_logic_layer.DBConnection;
-import data_source_logic_layer.exceptions.DataMapperException;
 import domain_logic_layer.Account;
 import domain_logic_layer.Client;
 
@@ -67,14 +63,8 @@ public class AdminLogin extends JFrame{
 	}
 
 	public void setAccountsTableAndButtons(){
-		DBConnection conexiune = DBConnection.getConnection();
-		AccountMapper mappy=new AccountMapper(conexiune);
-		try {
-			JScrollPane sp = generateTableAccount(mappy);
-			add(sp);
-		} catch (DataMapperException e) {
-			e.printStackTrace();
-		}
+		JScrollPane sp = generateTableAccount();
+		add(sp);
 
 		JButton insertButtonAccount = generateWidthHeightXFixedButton("Perform Insert Operation on Account",0, 300, 798, 30, this);
 		insertButtonAccount.addActionListener(e -> {
@@ -104,9 +94,9 @@ public class AdminLogin extends JFrame{
 		showAccountsCrud();
 	}
 
-	private JScrollPane generateTableAccount(AccountMapper mappy) throws DataMapperException {
+	private JScrollPane generateTableAccount(){
 		String[] column ={"Account ID","Client ID","Account Status","Account Type", "Amount", "Curreny Code"};
-		accountList=mappy.getAllAccountsForAll();
+		accountList= LoginAccountManagement.getAllAccountsForAll();
 		accountTable=new DefaultTableModel(column,0);
 		populateAccountTable();
 		JTable jt=new JTable(accountTable);
@@ -134,14 +124,9 @@ public class AdminLogin extends JFrame{
 	}
 
 	public void setClientsTableAndButtons(){
-		DBConnection conexiune = DBConnection.getConnection();
-		ClientMapper mappy=new ClientMapper(conexiune);
-		try {
-			JScrollPane sp = generateTableClients(mappy);
-			add(sp);
-		} catch (DataMapperException e) {
-			e.printStackTrace();
-		}
+		JScrollPane sp = generateTableClients();
+		add(sp);
+
 		JButton updateButtonClient= generateWidthHeightXFixedButton("Perform Update Operation on Client",0, 780, 798, 30, this);
 		updateButtonClient.addActionListener(e -> {
 //			insertOnClient((JTextField)accountElements[0][1]).getText(),
@@ -170,10 +155,10 @@ public class AdminLogin extends JFrame{
 		showClientsCrud();
 	}
 
-	private JScrollPane generateTableClients(ClientMapper mappy) throws DataMapperException {
+	private JScrollPane generateTableClients(){
 		String[] column ={"Client ID","Full name","Address", "CNP", "Login ID"};
 		clientTable =new DefaultTableModel(column,0);
-		clientList= LoginAccountManagement.getAllClients();
+		clientList= LoginAccountManagement.getAllClientsForAll();
 		populateClientTable();
 		JTable jt=new JTable(clientTable);
 		jt.setBounds(0, 520,800, 200);
@@ -184,7 +169,7 @@ public class AdminLogin extends JFrame{
 
 	private void updateClientTable() {
 		clientTable.setRowCount(0);
-		clientList= LoginAccountManagement.getAllClients();
+		clientList= LoginAccountManagement.getAllClientsForAll();
 		populateClientTable();
 	}
 
@@ -203,7 +188,7 @@ public class AdminLogin extends JFrame{
 
 	private void updateAccountTable() {
 		accountTable.setRowCount(0);
-		accountList= LoginAccountManagement.getAllAccount();
+		accountList= LoginAccountManagement.getAllAccountsForAll();
 		populateClientTable();
 	}
 

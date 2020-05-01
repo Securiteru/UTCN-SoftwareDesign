@@ -1,15 +1,14 @@
 package business_layer;
 
-import business_layer.business_exceptions.AccountDisactivatedException;
-import business_layer.business_exceptions.AmountMissMatchException;
-import business_layer.business_exceptions.BusinessLogicException;
+import business_layer.exceptions.AccountDisactivatedException;
+import business_layer.exceptions.AmountMissMatchException;
+import business_layer.exceptions.BusinessLogicException;
+import business_layer.exceptions.CurrencyMissmatchException;
 import data_source_logic_layer.AccountMapper;
 import data_source_logic_layer.DBConnection;
-import data_source_logic_layer.LoginMapper;
 import data_source_logic_layer.exceptions.DataMapperException;
 import domain_logic_layer.Account;
 import domain_logic_layer.Client;
-import domain_logic_layer.Login;
 
 import java.util.List;
 
@@ -20,7 +19,10 @@ public class AccountOperations {
 			AccountMapper accy=new AccountMapper(conexiune);
 			from=accy.findByAccountId(from.getAccount_id());
 			to=accy.findByAccountId(to.getAccount_id());
-			System.out.println("SENDING MONEY FROM ACCOUNT ID: "+to.getAccount_id()+" TO: ");
+			System.out.println("Sending money from account id: "+from.getAccount_id()+" to: "+to.getAccount_id());
+			if(!from.getCurrency_code().equals(to.getCurrency_code())){
+				throw new CurrencyMissmatchException();
+			}
 			if(to.getAccount_status() != 1 || from.getAccount_status() != 1){
 				throw new AccountDisactivatedException();
 			}
@@ -46,5 +48,16 @@ public class AccountOperations {
 		} catch (DataMapperException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static List<Account> getAllAccountsForAllUsers(){
+		DBConnection conexiune = DBConnection.getConnection();
+		AccountMapper mappy=new AccountMapper(conexiune);
+		try {
+			return mappy.getAllAccountsForAll();
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
