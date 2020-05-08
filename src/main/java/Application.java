@@ -1,5 +1,6 @@
 import data_source_logic_layer.DBConnection;
 import domain_logic_layer.Account;
+import domain_logic_layer.Login;
 import presentation_layer.AdminLogin;
 import presentation_layer.LoginScreen;
 import presentation_layer.UserLogin;
@@ -19,8 +20,8 @@ public class Application {
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-		AdminLogin login=new AdminLogin();
-		login.setVisible(true);
+		LoginScreen l=new LoginScreen(false);
+//		UserLogin login=new UserLogin(logincli,false);
 	}
 
 	public static void printy(String message){

@@ -1,6 +1,6 @@
 package business_layer.business_exceptions;
 
-import data_source_logic_layer.exceptions.DataMapperException;
+import business_layer.exceptions.BusinessLogicException;
 
 public class AccountDisactivatedException extends BusinessLogicException {
 	private static final String  ACCOUNT_INACTIVE = "Error :::::: One of the required accounts is inactive.";

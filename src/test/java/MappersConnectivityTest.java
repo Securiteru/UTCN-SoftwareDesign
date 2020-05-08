@@ -3,15 +3,14 @@ import data_source_logic_layer.ClientMapper;
 import data_source_logic_layer.DBConnection;
 import data_source_logic_layer.LoginMapper;
 import data_source_logic_layer.exceptions.DataMapperException;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class MappersTest {
+import static org.junit.Assert.assertNull;
+
+public class MappersConnectivityTest {
 	public static LoginMapper mappy;
-	public static AccountMapper  mappy2;
+	public static AccountMapper mappy2;
 	public static ClientMapper mappy3;
 
 	@BeforeClass
@@ -23,9 +22,27 @@ public class MappersTest {
 	}
 
 	@Test
-	public void idTest(){
+	public void LoginNullTest(){
 		try {
 			assertNull(mappy.findByLoginId(0));
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void AccountNullTest(){
+		try {
+			assertNull(mappy2.findByAccountId(0));
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void ClientNullTest(){
+		try {
+			assertNull(mappy3.findByClientId(0));
 		} catch (DataMapperException e) {
 			e.printStackTrace();
 		}

@@ -20,21 +20,25 @@ public class AccountOperations {
 			from=accy.findByAccountId(from.getAccount_id());
 			to=accy.findByAccountId(to.getAccount_id());
 			System.out.println("Sending money from account id: "+from.getAccount_id()+" to: "+to.getAccount_id());
-			if(!from.getCurrency_code().equals(to.getCurrency_code())){
-				throw new CurrencyMissmatchException();
-			}
-			if(to.getAccount_status() != 1 || from.getAccount_status() != 1){
-				throw new AccountDisactivatedException();
-			}
-			if (from.getAmount() < sum) {
-				throw new AmountMissMatchException();
-			}
+			CheckAccounts(to, from, sum);
 			accy.transferBetweenAccounts(to, from, sum);
-			return "Operation Successful! Transfered " + sum + " to account: " + to.getAccount_id() + " from account: " + from.getAccount_id();
+			return "Operation Successful! Transfered "+ sum + " to account: " + to.getAccount_id() + " from account: " + from.getAccount_id();
 		} catch (DataMapperException | BusinessLogicException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 			return e.getMessage();
+		}
+	}
+
+	private static void CheckAccounts(Account to, Account from, float sum) throws CurrencyMissmatchException, AccountDisactivatedException, AmountMissMatchException {
+		if(!from.getCurrency_code().equals(to.getCurrency_code())){
+			throw new CurrencyMissmatchException();
+		}
+		if(to.getAccount_status() != 1 || from.getAccount_status() != 1){
+			throw new AccountDisactivatedException();
+		}
+		if (from.getAmount() < sum) {
+			throw new AmountMissMatchException();
 		}
 	}
 

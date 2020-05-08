@@ -1,4 +1,4 @@
-package presentation_layer;
+package presentation_layer.cli_login;
 
 import data_source_logic_layer.exceptions.DataMapperException;
 import data_source_logic_layer.LoginMapper;

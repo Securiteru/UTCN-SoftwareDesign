@@ -1,4 +1,4 @@
-package presentation_layer;
+package presentation_layer.cli_login;
 
 import domain_logic_layer.Login;
 

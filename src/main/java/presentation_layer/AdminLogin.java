@@ -1,12 +1,16 @@
 package presentation_layer;
 
+import business_layer.DBCrud;
 import business_layer.LoginAccountManagement;
 import domain_logic_layer.Account;
 import domain_logic_layer.Client;
+import presentation_layer.validation.AdminValidation;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.transform.Source;
 import java.awt.*;
+import java.sql.SQLOutput;
 import java.util.List;
 
 public class AdminLogin extends JFrame{
@@ -22,7 +26,7 @@ public class AdminLogin extends JFrame{
 	private DefaultTableModel clientTable;
 	private List<Client> clientList;
 	private Object[][] accountElements=new Object[13][4];
-	private Object[][] clientElements=new Object[13][4];
+	private Object[][] clientElements=new Object[11][4];
 
 	private DefaultTableModel accountTable;
 	private List<Account> accountList;
@@ -47,6 +51,9 @@ public class AdminLogin extends JFrame{
 		for(int x=0; x<accountElements.length; x++){
 			accountElements[x][0]=new Integer(1);
 		}
+		for(int x=0; x<clientElements.length; x++){
+			clientElements[x][0]=new Integer(1);
+		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Admin Screen");
 		setResizable(false);
@@ -58,7 +65,11 @@ public class AdminLogin extends JFrame{
 		setLayout(null);
 		setVisible(true);
 		for(int x=0; x<accountElements.length; x++){
-			System.out.println(accountElements[x][3].toString());
+//			System.out.println(accountElements[x][3].toString());
+		}
+
+		for(int x=0; x<clientElements.length; x++){
+//			System.out.println(clientElements[x][3].toString());
 		}
 	}
 
@@ -68,27 +79,68 @@ public class AdminLogin extends JFrame{
 
 		JButton insertButtonAccount = generateWidthHeightXFixedButton("Perform Insert Operation on Account",0, 300, 798, 30, this);
 		insertButtonAccount.addActionListener(e -> {
-//			insertOnAccount((JTextField)accountElements[0][1]).getText(),
-//					((JTextField)accountElements[1][1]).getText(),
-//					((JTextField)accountElements[2][1]).getText(),
-//					((JTextField)accountElements[3][1]).getText(),
-//					((JTextField)accountElements[4][1]).getText(),
-//					((JTextField)accountElements[5][1]).getText();
+//			String[] column ={"Account ID","Client ID","Account Status","Account Type", "Amount", "Curreny Code"};
+//          public Account(int account_id 0, int client_id 1, String account_type 3, float amount 4, String currency_code 5, int account_status 2) {
+			// 0 account_id - 1 client_id - 2 account status - 3 account type - 4 amount - 5 currency_code
+			String message="";
+			if(AdminValidation.validateInsertAccount(
+					((JTextField)accountElements[1][1]).getText(),
+					((JTextField)accountElements[3][1]).getText(),
+					((JTextField)accountElements[4][1]).getText(),
+					((JTextField)accountElements[5][1]).getText(),
+					((JTextField)accountElements[2][1]).getText()
+			)) {
+				message = DBCrud.insertOnAccount(new Account(
+//						Integer.parseInt(((JTextField) accountElements[0][1]).getText()), //account_id
+						Integer.parseInt(((JTextField) accountElements[1][1]).getText()), //client_id
+						((JTextField) accountElements[3][1]).getText(), //account_type
+						Float.parseFloat(((JTextField) accountElements[4][1]).getText()), //amount
+						((JTextField) accountElements[5][1]).getText(), //currency_code
+						Integer.parseInt(((JTextField) accountElements[2][1]).getText()) //account_status
+				));
+				updateAccountTable();
+			}else{
+				message="Input is invalid!";
+			}
+			JOptionPane.showMessageDialog(this, message);
 		});
 
 		JButton updateButtonAccount= generateWidthHeightXFixedButton("Perform Update Operation on Account",0, 390, 798, 30, this);
 		updateButtonAccount.addActionListener(e -> {
-//			updateOnAccount((JTextField)accountElements[6][1]).getText(),
-//							((JTextField)accountElements[7][1]).getText(),
-//							((JTextField)accountElements[8][1]).getText(),
-//							((JTextField)accountElements[9][1]).getText(),
-//							((JTextField)accountElements[10][1]).getText(),
-//							((JTextField)accountElements[11][1]).getText();
+			String message="";
+			if(AdminValidation.validateUpdateAccount(
+					((JTextField)accountElements[6][1]).getText(),
+					((JTextField)accountElements[7][1]).getText(),
+					((JTextField)accountElements[9][1]).getText(),
+					((JTextField)accountElements[10][1]).getText(),
+					((JTextField)accountElements[11][1]).getText(),
+					((JTextField)accountElements[8][1]).getText()
+			)) {
+				message = DBCrud.updateOnAccount(new Account(
+						Integer.parseInt(((JTextField) accountElements[6][1]).getText()),
+						Integer.parseInt(((JTextField) accountElements[7][1]).getText()),
+						((JTextField) accountElements[9][1]).getText(),
+						Float.parseFloat(((JTextField) accountElements[10][1]).getText()),
+						((JTextField) accountElements[11][1]).getText(),
+						Integer.parseInt(((JTextField) accountElements[8][1]).getText())
+				));
+			}else{
+				message="Input is invalid!";
+			}
+			JOptionPane.showMessageDialog(this, message);
+			updateAccountTable();
 		});
 
 		JButton deleteButtonAccount= generateWidthHeightXFixedButton("Perform Delete Operation on Account",0, 460, 798, 30, this);
 		deleteButtonAccount.addActionListener(e -> {
-//			deleteOnAccount(((JTextField)accountElements[12][1]).getText());
+			String message="";
+			if(AdminValidation.validateDeleteAccount(((JTextField) accountElements[12][1]).getText())) {
+				message = DBCrud.deleteOnAccount(new Account(Integer.parseInt(((JTextField) accountElements[12][1]).getText())));
+			}else{
+				message="Input is invalid!";
+			}
+			JOptionPane.showMessageDialog(this,message);
+			updateAccountTable();
 		});
 
 		showAccountsCrud();
@@ -126,30 +178,66 @@ public class AdminLogin extends JFrame{
 	public void setClientsTableAndButtons(){
 		JScrollPane sp = generateTableClients();
 		add(sp);
+		JButton insertButtonClient= generateWidthHeightXFixedButton("Perform Insert Operation on Client",0, 780, 798, 30, this);
+		insertButtonClient.addActionListener(e -> {
+//			String[] column ={"Client ID","Full name","Address", "CNP", "Login ID"};
+//			public Client(int client_id, String full_name, String address, String CNP, int login_id) {
+			String message="";
+			System.out.println("IN INSERT");
+			if(AdminValidation.validateUpdateClient(
+					((JTextField) clientElements[0][1]).getText(),
+					((JTextField)clientElements[4][1]).getText()
+			)) {
+				message = DBCrud.insertOnClient(new Client(
+//						Integer.parseInt(((JTextField) clientElements[0][1]).getText()),
+						((JTextField)clientElements[1][1]).getText(),
+						((JTextField)clientElements[2][1]).getText(),
+						((JTextField)clientElements[3][1]).getText(),
+						Integer.parseInt(((JTextField)clientElements[4][1]).getText())));
+				updateAccountTable();
+			}else{
+				message="Input is invalid!";
+			}
+			JOptionPane.showMessageDialog(this, message);
 
-		JButton updateButtonClient= generateWidthHeightXFixedButton("Perform Update Operation on Client",0, 780, 798, 30, this);
-		updateButtonClient.addActionListener(e -> {
-//			insertOnClient((JTextField)accountElements[0][1]).getText(),
-//					((JTextField)accountElements[1][1]).getText(),
-//					((JTextField)accountElements[2][1]).getText(),
-//					((JTextField)accountElements[3][1]).getText(),
-//					((JTextField)accountElements[4][1]).getText(),
-//					((JTextField)accountElements[5][1]).getText();
+			updateClientTable();
 		});
 
-		JButton insertButtonClient= generateWidthHeightXFixedButton("Perform Insert Operation on Client",0, 870, 798, 30, this);
-		insertButtonClient.addActionListener(e -> {
-//			updateOnClient((JTextField)accountElements[6][1]).getText(),
-//					((JTextField)accountElements[7][1]).getText(),
-//					((JTextField)accountElements[8][1]).getText(),
-//					((JTextField)accountElements[9][1]).getText(),
-//					((JTextField)accountElements[10][1]).getText(),
-//					((JTextField)accountElements[11][1]).getText();
+		JButton updateButtonClient= generateWidthHeightXFixedButton("Perform Update Operation on Client",0, 870, 798, 30, this);
+		updateButtonClient.addActionListener(e -> {
+			System.out.println("IN UPDATE");
+			String message="";
+			if(AdminValidation.validateInsertClient(
+					((JTextField) clientElements[5][1]).getText(),
+					((JTextField)clientElements[9][1]).getText()
+			)) {
+				message = DBCrud.updateOnClient(new Client(
+						Integer.parseInt(((JTextField) clientElements[5][1]).getText()),
+						((JTextField)clientElements[6][1]).getText(),
+						((JTextField)clientElements[7][1]).getText(),
+						((JTextField)clientElements[8][1]).getText(),
+						Integer.parseInt(((JTextField)clientElements[9][1]).getText())));
+				updateAccountTable();
+			}else{
+				message="Input is invalid!";
+			}
+			JOptionPane.showMessageDialog(this, message);
+			updateClientTable();
 		});
 
 		JButton deleteButtonClient= generateWidthHeightXFixedButton("Perform Delete Operation on Client",0, 930, 798, 30, this);
 		deleteButtonClient.addActionListener(e -> {
-//			deleteOnClient(((JTextField)accountElements[12][1]).getText());
+			String message="";
+			if(AdminValidation.validateDeleteClient(
+					((JTextField)clientElements[10][1]).getText()
+			)) {
+				message = DBCrud.deleteOnClient(new Client(Integer.parseInt(((JTextField) clientElements[10][1]).getText())));
+				updateAccountTable();
+			}else{
+				message="Input is invalid!";
+			}
+			JOptionPane.showMessageDialog(this, message);
+			updateClientTable();
 		});
 
 		showClientsCrud();
@@ -181,7 +269,6 @@ public class AdminLogin extends JFrame{
 			String cnp = client.getCNP();
 			int login_Id=client.getLogin_id();
 			Object[] data = {client_id, full_name, adress, cnp,login_Id};
-			System.out.println("PRINTING LOOP ARRAY" + data.toString());
 			clientTable.addRow(data);
 		}
 	}
@@ -189,7 +276,7 @@ public class AdminLogin extends JFrame{
 	private void updateAccountTable() {
 		accountTable.setRowCount(0);
 		accountList= LoginAccountManagement.getAllAccountsForAll();
-		populateClientTable();
+		populateAccountTable();
 	}
 
 	private void populateAccountTable(){
@@ -217,15 +304,7 @@ public class AdminLogin extends JFrame{
 			generateFieldAndLabel(columns[x], xCounter, 810, 133,30,xCounter,840,133, 30, "client_update");
 			xCounter += 160;
 		}
-		generateFieldAndLabel("Account Id to delete:", 100,430, 200,30, 500,430, 200,30,"client_delete");
-
-		JTextField ClientIdToDelete=new JTextField();
-		JLabel ClientIdToDeleteLabel=new JLabel("Client Id to delete:");
-		ClientIdToDeleteLabel.setBounds(100,900, 200,30);
-		ClientIdToDelete.setBounds(500,900, 200,30);
-		add(ClientIdToDeleteLabel);
-		add(ClientIdToDelete);
-
+		generateFieldAndLabel("Client Id to delete:", 100,900, 200,30, 500,900, 200,30,"client_delete");
 	}
 
 	private JButton generateWidthHeightXFixedButton(String name, int x, int y, int width, int height, JFrame itemJoinedTo) {

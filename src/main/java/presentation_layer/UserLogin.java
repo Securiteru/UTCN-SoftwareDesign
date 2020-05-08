@@ -2,6 +2,7 @@ package presentation_layer;
 
 import business_layer.LoginAccountManagement;
 import domain_logic_layer.Account;
+import domain_logic_layer.Client;
 import domain_logic_layer.Login;
 import presentation_layer.exceptions.InputInvalidException;
 import presentation_layer.exceptions.PresentationLayerException;
@@ -24,6 +25,11 @@ public class UserLogin extends JFrame{
 	private DefaultTableModel accountsTable;
 	private List<Account> userAccounts;
 	private int loggedClientId;
+	public JTextField accountFrom;
+	public JTextField accountTo;
+	public JTextField amount;
+	private boolean mock;
+	public JButton gg;
 
 	public int getLoggedClientId() {
 		return loggedClientId;
@@ -47,7 +53,8 @@ public class UserLogin extends JFrame{
 		});
 	}
 
-	public UserLogin(Login correctLogin) {
+	public UserLogin(Login correctLogin, boolean mock) {
+		this.mock=mock;
 		this.setLoggedClientId(Objects.requireNonNull(LoginAccountManagement.getClientFromLogin(correctLogin)).getClient_id());
 		centerScreen();
 		setResizable(false);
@@ -73,9 +80,10 @@ public class UserLogin extends JFrame{
 	}
 
 	public void accountTransferOptionsShow(){
-		JTextField accountFrom=new JTextField();
-		JTextField accountTo=new JTextField();
-		JTextField amount=new JTextField();
+
+		accountFrom = new JTextField();
+		accountTo = new JTextField();
+		amount = new JTextField();
 
 		JLabel accountFromLabel=new JLabel("Account From:");
 		JLabel accountToLabel=new JLabel("Account To:");
@@ -103,7 +111,7 @@ public class UserLogin extends JFrame{
 		add(accountToLabel);
 		add(amountLabel);
 
-		JButton gg=new JButton("Transfer");
+		gg = new JButton("Transfer");
 		gg.setBounds(0,430,600,30);
 		add(gg);
 		gg.addActionListener(e->{

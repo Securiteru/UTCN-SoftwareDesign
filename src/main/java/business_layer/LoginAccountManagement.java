@@ -26,12 +26,14 @@ public class LoginAccountManagement {
 	}
 
 	static public Client getClientFromLogin(Login correctLogin){
+		System.out.println("in get client from login");
 		DBConnection conexiune = DBConnection.getConnection();
 		ClientMapper mappy=new ClientMapper(conexiune);
 		try {
+			System.out.println("LOGIN ID "+correctLogin.getLogin_id());
 			return mappy.findClientByLoginId(correctLogin.getLogin_id());
 		} catch (DataMapperException e) {
-			e.printStackTrace();
+			System.out.println(e.toString());
 		}
 		return null;
 	}
@@ -61,5 +63,118 @@ public class LoginAccountManagement {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	static public boolean createLogin(String password, String username, String role){
+		DBConnection conexiune = DBConnection.getConnection();
+		LoginMapper mappy=new LoginMapper(conexiune);
+		Login log=new Login();
+		log.setPassword(password);
+		log.setUsername(username);
+		log.setUser_role(role);
+		try {
+			mappy.insert(log);
+			return true;
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	static public Login createLogin(Login l){
+		DBConnection conexiune = DBConnection.getConnection();
+		LoginMapper mappy=new LoginMapper(conexiune);
+		try {
+			return mappy.insert(l);
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+		return new Login();
+	}
+
+	static public boolean createAccount(Account a){
+		DBConnection conexiune = DBConnection.getConnection();
+		AccountMapper mappy=new AccountMapper(conexiune);
+		try {
+			mappy.insert(a);
+			return true;
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	static public boolean createAccountFixed(Account a){
+		DBConnection conexiune = DBConnection.getConnection();
+		AccountMapper mappy=new AccountMapper(conexiune);
+		try {
+			mappy.insertFixed(a);
+			return true;
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+
+	static public boolean createClient(Client c){
+		DBConnection conexiune = DBConnection.getConnection();
+		ClientMapper mappy=new ClientMapper(conexiune);
+		try {
+			mappy.insert(c);
+			return true;
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	static public boolean createClientFixed(Client c){
+		DBConnection conexiune = DBConnection.getConnection();
+		ClientMapper mappy=new ClientMapper(conexiune);
+		try {
+			mappy.insertFixed(c);
+			return true;
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+
+
+	static public boolean deleteClient(Client c){
+		DBConnection conexiune = DBConnection.getConnection();
+		ClientMapper mappy=new ClientMapper(conexiune);
+		try {
+			mappy.delete(c);
+			return true;
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	static public boolean deleteAccount(Account a){
+		DBConnection conexiune = DBConnection.getConnection();
+		AccountMapper mappy=new AccountMapper(conexiune);
+		try {
+			mappy.delete(a);
+			return true;
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	static public boolean deleteLogin(Login l){
+		DBConnection conexiune = DBConnection.getConnection();
+		LoginMapper mappy=new LoginMapper(conexiune);
+		try {
+			mappy.delete(l);
+			return true;
+		} catch (DataMapperException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

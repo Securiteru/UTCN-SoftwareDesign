@@ -37,7 +37,7 @@ public class  LoginMapper extends DataMapper {
 				}
 				return null;
 			} catch (SQLException e) {
-				throw new DataMapperException("Error occured reading Students from the data source.", e);
+				throw new DataMapperException("Error occured reading Login from the data source.", e);
 			}
 		}
 
@@ -62,7 +62,7 @@ public class  LoginMapper extends DataMapper {
 				}
 				return null;
 			} catch (SQLException e) {
-				throw new DataMapperException("Error occured reading Students from the data source.", e);
+				throw new DataMapperException("Error occured reading Login from the data source.", e);
 			}
 		}
 
@@ -77,10 +77,10 @@ public class  LoginMapper extends DataMapper {
 				dbStatement.setInt(4, login.getLogin_id());
 				dbStatement.executeUpdate();
 			} catch (SQLException e) {
-				throw new DataMapperException("Error occured updating Students from the data source.", e);
+				throw new DataMapperException("Error occured updating Login from the data source.", e);
 			}
 		}
-		public synchronized void insert(Login login) throws DataMapperException {
+		public synchronized Login insert(Login login) throws DataMapperException {
 			try {
 				Connection db = this.conexiune.connection;
 				String statement = "INSERT INTO `login_table` (`login_id`, `username`, `password`, `user_role`) VALUES (?, ?, ?, ?)";
@@ -90,8 +90,10 @@ public class  LoginMapper extends DataMapper {
 				dbStatement.setString(3, login.getPassword());
 				dbStatement.setString(4, login.getUser_role());
 				dbStatement.executeUpdate();
+
+				return this.findByUsernamePasswordCombination(login.getUsername(), login.getPassword());
 			} catch (SQLException e) {
-				throw new DataMapperException("Error occured inserting Students from the data source.", e);
+				throw new DataMapperException("Error occured inserting Login from the data source.", e);
 			}
 		}
 		public synchronized void delete(Login login) throws DataMapperException {
@@ -102,7 +104,7 @@ public class  LoginMapper extends DataMapper {
 				dbStatement.setInt(1, login.getLogin_id());
 				dbStatement.executeUpdate();
 			} catch (SQLException e) {
-				throw new DataMapperException("Error occured deleting Students from the data source.", e);
+				throw new DataMapperException("Error occured deleting Login from the data source.", e);
 			}
 		}
 
@@ -125,7 +127,7 @@ public class  LoginMapper extends DataMapper {
 					loginList.add(login);
 				}
 			} catch (SQLException e) {
-				throw new DataMapperException("Error occured reading Students from the data source.", e);
+				throw new DataMapperException("Error occured reading Login from the data source.", e);
 			}
 		return loginList;
 		}
@@ -148,6 +150,8 @@ public class  LoginMapper extends DataMapper {
 				role = rs.getString("user_role");
 				int login_id = rs.getInt("login_id");
 				Login loggy=new Login(login_id);
+				loggy.setUser_role(role);
+				loggy.setLogin_id(login_id);
 				if (role.equals(role_wanted)) {
 					return loggy;
 				}
