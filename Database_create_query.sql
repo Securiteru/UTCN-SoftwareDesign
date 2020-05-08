@@ -1,4 +1,4 @@
-SELECT * FROM university.account_table;CREATE TABLE `account_table` (
+CREATE TABLE `account_table` (
   `account_id` int(6) unsigned NOT NULL AUTO_INCREMENT,
   `client_id` int(6) unsigned NOT NULL,
   `account_type` varchar(15) NOT NULL,
@@ -11,7 +11,7 @@ SELECT * FROM university.account_table;CREATE TABLE `account_table` (
 ) ENGINE=InnoDB AUTO_INCREMENT=100001 DEFAULT CHARSET=latin1;
 
 
-SELECT * FROM university.account_table;CREATE TABLE `account_table` (
+CREATE TABLE `account_table` (
   `account_id` int(6) unsigned NOT NULL AUTO_INCREMENT,
   `client_id` int(6) unsigned NOT NULL,
   `account_type` varchar(15) NOT NULL,
