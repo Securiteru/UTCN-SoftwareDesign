@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<users>
+    <user id="1">
+        <username>user</username>
+        <password>user</password>
+        <role>user</role>
+        <name>plebe</name>
+    </user>
+    <user id="2">
+        <username>admin</username>
+        <password>admin</password>
+        <role>admin</role>
+        <name>sefu</name>
+    </user>
+</users>

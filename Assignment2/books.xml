@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<books>
+    <book id="1">
+        <title>Java EE 8 Application Development: Develop Enterprise applications using the latest versions of CDI, JAX-RS, JSON-B, JPA, Security, and more</title>
+        <genre>Programming</genre>
+        <author>David Heffelfinger</author>
+        <price>150</price>
+        <stock>5</stock>
+    </book>
+    <book id="2">
+        <title>XQuery: Search Across a Variety of XML Data (Englisch) Taschenbuch – 15. Dezember 2015</title>
+        <genre>Programming</genre>
+        <author>Priscilla Walmsley</author>
+        <price>190</price>
+        <stock>4</stock>
+    </book>
+    <book id="3">
+        <title>XML and JSON Recipes for SQL Server: A Problem-Solution Approach (Englisch) Taschenbuch – 19. Dezember 2017</title>
+        <genre>Programming</genre>
+        <author>Alex Grinberg</author>
+        <price>100</price>
+        <stock>10</stock>
+    </book>
+</books>
