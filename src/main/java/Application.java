@@ -21,7 +21,6 @@ public class Application {
 			e.printStackTrace();
 		}
 		LoginScreen l=new LoginScreen(false);
-//		UserLogin login=new UserLogin(logincli,false);
 	}
 
 	public static void printy(String message){
